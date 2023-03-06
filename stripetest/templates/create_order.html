@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+	<title>Order Form</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+<body>
+	<div class="container">
+		<h1>Create Order</h1>
+		<form method="POST" action="{% url 'create_order' %}">
+		    {% csrf_token %}
+		    <ul>
+			    <li>
+			    	<label for="id_name">Name:</label>
+			    	{{ form.name }}
+			    </li>
+			    <li>
+			    	<label for="id_items">Items:</label>
+			    	{{ form.items }}
+			    </li>
+			    <li>
+			    	<label for="id_discount">Discount:</label>
+			    	{{ form.discount }}
+			    </li>
+			    <li>
+			    	<label for="id_tax">Tax:</label>
+			    	{{ form.tax }}
+			    </li>
+			    <li>
+			    	<button id="checkout-button" type="submit">Create Order</button>
+			    </li>
+		    </ul>
+		</form>
+	</div>
+</body>
+</html>

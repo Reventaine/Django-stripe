@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+  <title>{{ item.name }}</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Order #{{ order.pk }}</h1>
+    <table class="table">
+      <tr>
+        <th>Item</th>
+        <th>Price</th>
+      </tr>
+      {% for item in order.items.all %}
+        <tr>
+          <td>{{ item.name }}</td>
+          <td>${{ item.price }}</td>
+        </tr>
+      {% endfor %}
+      {% if order.discount %}
+        <tr>
+          <td>Discount ({{ order.discount.discount_percent }}% off)</td>
+          <td>-${{ order.discount.amount_saved }}</td>
+        </tr>
+      {% endif %}
+      {% if order.tax %}
+        <tr>
+          <td>Tax ({{ order.tax.tax_percent }}% tax)</td>
+          <td>${{ order.tax.amount }}</td>
+        </tr>
+      {% endif %}
+      <tr>
+        <th>Total amount:</th>
+        <td>${{ order.total_amount }}</td>
+      </tr>
+    </table>
+    <div class="button-container">
+      <button id="checkout-button" class="button">Buy now</button>
+    </div>
+  </div>
+          <script>
+              var sessionId = null;
+              var stripe = Stripe("{{ stripe_public_key }}");
+              document.getElementById("checkout-button").addEventListener("click", function () {
+                  fetch('/buy_order/{{ order.pk }}/')
+                      .then(function (response) {
+                          return response.json();
+                      })
+                      .then(function (session) {
+                          sessionId = session.id;
+                          return stripe.redirectToCheckout({
+                              sessionId: sessionId
+                          });
+                      })
+                      .then(function (result) {
+                          // Handle result.error or redirect to error page
+                      });
+              });
+          </script>
+</body>
+</html>
