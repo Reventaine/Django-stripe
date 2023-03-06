@@ -1,5 +1,6 @@
 # Django-stripe
-Django app with Stripe API included
+Django app with Stripe API included<br>
+## <a href="https://kind-river-b102c72d34ab4214bc176ba7236916e6.azurewebsites.net">Try it</a>
 
 ## Installation
 
